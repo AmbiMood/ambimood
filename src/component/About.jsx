@@ -311,7 +311,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import BackButton from './BackButton';
 const About = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -416,6 +416,7 @@ const About = () => {
         @media (max-width: 768px) { .desktop-nav { display: none !important; } .hamburger-btn { display: block !important; } }
         @media (min-width: 769px) { .hamburger-btn { display: none !important; } .desktop-nav { display: flex !important; } }
       `}</style>
+      <BackButton />
     </div>
   );
 };

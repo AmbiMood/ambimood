@@ -470,7 +470,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
-
+import BackButton from './BackButton';
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
@@ -599,6 +599,7 @@ const Contact = () => {
           .desktop-nav { display: flex !important; }
         }
       `}</style>
+      <BackButton />
     </div>
   );
 };

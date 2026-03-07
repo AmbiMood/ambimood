@@ -762,7 +762,7 @@
 
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import BackButton from './BackButton';
 const Signup = () => {
   const navigate = useNavigate();
   
@@ -1240,6 +1240,7 @@ const Signup = () => {
         )}
 
       </div>
+      <BackButton />
     </div>
   );
 };

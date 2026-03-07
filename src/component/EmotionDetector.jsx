@@ -2006,7 +2006,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import * as faceapi from 'face-api.js';
-
+import BackButton from './BackButton';
 const EmotionDetector = () => {
   const webcamRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -2231,6 +2231,7 @@ const EmotionDetector = () => {
           .lang-grid { grid-template-columns: repeat(2, 1fr); }
         }
       `}</style>
+      <BackButton />
     </div>
   );
 };

@@ -751,7 +751,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-
+import BackButton from './BackButton';
 const EMOTION_COLORS = { happy: '#f59e0b', sad: '#60a5fa', angry: '#ef4444', neutral: '#94a3b8', fearful: '#a78bfa', disgusted: '#10b981', surprised: '#f97316', energetic: '#ec4899', calm: '#06b6d4', romantic: '#e879f9' };
 const EMOTION_EMOJI = { happy: '😊', sad: '😢', angry: '😠', neutral: '😐', fearful: '😨', disgusted: '🤢', surprised: '😲', energetic: '⚡', calm: '😌', romantic: '❤️' };
 
@@ -967,6 +967,7 @@ const Profile = () => {
         @media (max-width: 768px) { .desktop-nav { display: none !important; } .hamburger-btn { display: block !important; } }
         @media (min-width: 769px) { .hamburger-btn { display: none !important; } .desktop-nav { display: flex !important; } }
       `}</style>
+      <BackButton />
     </div>
   );
 };
