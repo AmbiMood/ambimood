@@ -760,485 +760,651 @@
 
 
 
+// import { useState } from 'react';
+// import { Link, useNavigate } from 'react-router-dom';
+// import BackButton from './BackButton';
+// const Signup = () => {
+//   const navigate = useNavigate();
+  
+//   const [step, setStep] = useState(1);
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     email: '',
+//     password: '',
+//     confirmPassword: ''
+//   });
+//   const [otp, setOtp] = useState('');
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState('');
+//   const [success, setSuccess] = useState('');
+
+//   const handleChange = (e) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setError('');
+//     setSuccess('');
+//     if (formData.password !== formData.confirmPassword) {
+//       setError('Passwords do not match!');
+//       return;
+//     }
+//     setLoading(true);
+//     try {
+//       const response = await fetch('https://ambimood-backend-2.onrender.com/api/signup', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({
+//           name: formData.name,
+//           email: formData.email,
+//           password: formData.password
+//         })
+//       });
+//       const data = await response.json();
+//       if (response.ok) {
+//         setSuccess('OTP sent! Check your email 📧');
+//         setTimeout(() => setStep(2), 1500);
+//       } else {
+//         setError(data.message);
+//       }
+//     } catch (err) {
+//       setError('Cannot connect to server! Make sure backend is running.');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleVerifyOTP = async (e) => {
+//     e.preventDefault();
+//     setError('');
+//     setLoading(true);
+//     try {
+//       const response = await fetch('https://ambimood-backend-2.onrender.com/api/verify-otp', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ email: formData.email, otp: otp })
+//       });
+//       const data = await response.json();
+//       if (response.ok) {
+//         localStorage.setItem('userName', formData.name);
+//       localStorage.setItem('userEmail', formData.email);
+//         setSuccess('Signup Successful! Redirecting...');
+//         setTimeout(() => navigate('/login'), 2000);
+//       } else {
+//         setError(data.message);
+//       }
+//     } catch (err) {
+//       setError('Network error!');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleResendOTP = async () => {
+//     setLoading(true);
+//     setError('');
+//     setSuccess('');
+//     try {
+//       const response = await fetch('https://ambimood-backend-2.onrender.com/api/resend-otp', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ email: formData.email })
+//       });
+//       const data = await response.json();
+//       if (response.ok) {
+//         setSuccess('New OTP sent! 📧');
+//       } else {
+//         setError(data.message);
+//       }
+//     } catch (err) {
+//       setError('Error resending OTP');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const styles = {
+//     page: {
+//       minHeight: '100vh',
+//       background: 'linear-gradient(135deg, #0a0a0f 0%, #1a0533 50%, #0d0d1a 100%)',
+//       display: 'flex',
+//       alignItems: 'center',
+//       justifyContent: 'center',
+//       padding: '40px 16px',
+//       fontFamily: "'DM Sans', sans-serif",
+//       position: 'relative',
+//       overflow: 'hidden',
+//     },
+//     orb1: {
+//       position: 'absolute',
+//       width: '400px',
+//       height: '400px',
+//       background: 'radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%)',
+//       top: '-100px',
+//       left: '-100px',
+//       borderRadius: '50%',
+//       pointerEvents: 'none',
+//     },
+//     orb2: {
+//       position: 'absolute',
+//       width: '350px',
+//       height: '350px',
+//       background: 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, transparent 70%)',
+//       bottom: '-80px',
+//       right: '-80px',
+//       borderRadius: '50%',
+//       pointerEvents: 'none',
+//     },
+//     card: {
+//       background: 'rgba(255,255,255,0.04)',
+//       border: '1px solid rgba(139,92,246,0.25)',
+//       borderRadius: '24px',
+//       padding: '48px 40px',
+//       width: '100%',
+//       maxWidth: '440px',
+//       backdropFilter: 'blur(20px)',
+//       position: 'relative',
+//       zIndex: 1,
+//     },
+//     brand: {
+//       textAlign: 'center',
+//       marginBottom: '32px',
+//     },
+//     brandName: {
+//       fontSize: '1.4rem',
+//       fontWeight: '800',
+//       color: 'white',
+//       letterSpacing: '3px',
+//       fontFamily: 'serif',
+//     },
+//     brandAccent: {
+//       color: '#a78bfa',
+//     },
+//     title: {
+//       fontSize: '1.9rem',
+//       fontWeight: '700',
+//       color: 'white',
+//       textAlign: 'center',
+//       marginBottom: '8px',
+//     },
+//     subtitle: {
+//       fontSize: '0.9rem',
+//       color: 'rgba(255,255,255,0.45)',
+//       textAlign: 'center',
+//       marginBottom: '32px',
+//     },
+//     emailHighlight: {
+//       color: '#a78bfa',
+//       fontWeight: '600',
+//     },
+//     label: {
+//       display: 'block',
+//       fontSize: '0.8rem',
+//       fontWeight: '500',
+//       color: 'rgba(255,255,255,0.6)',
+//       marginBottom: '8px',
+//       letterSpacing: '0.5px',
+//       textTransform: 'uppercase',
+//     },
+//     input: {
+//       width: '100%',
+//       padding: '14px 18px',
+//       background: 'rgba(255,255,255,0.06)',
+//       border: '1px solid rgba(139,92,246,0.2)',
+//       borderRadius: '12px',
+//       color: 'white',
+//       fontSize: '0.95rem',
+//       outline: 'none',
+//       transition: 'border-color 0.3s',
+//       marginBottom: '20px',
+//       boxSizing: 'border-box',
+//     },
+//     otpInput: {
+//       width: '100%',
+//       padding: '18px',
+//       background: 'rgba(255,255,255,0.06)',
+//       border: '2px solid rgba(139,92,246,0.3)',
+//       borderRadius: '16px',
+//       color: 'white',
+//       fontSize: '2rem',
+//       fontWeight: '700',
+//       textAlign: 'center',
+//       letterSpacing: '12px',
+//       outline: 'none',
+//       marginBottom: '8px',
+//       boxSizing: 'border-box',
+//     },
+//     otpHint: {
+//       fontSize: '0.78rem',
+//       color: 'rgba(255,255,255,0.35)',
+//       textAlign: 'center',
+//       marginBottom: '24px',
+//     },
+//     btnPrimary: {
+//       width: '100%',
+//       padding: '15px',
+//       background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+//       border: 'none',
+//       borderRadius: '12px',
+//       color: 'white',
+//       fontSize: '1rem',
+//       fontWeight: '600',
+//       cursor: 'pointer',
+//       transition: 'all 0.3s ease',
+//       marginBottom: '24px',
+//       letterSpacing: '0.3px',
+//     },
+//     btnDisabled: {
+//       width: '100%',
+//       padding: '15px',
+//       background: 'rgba(255,255,255,0.1)',
+//       border: 'none',
+//       borderRadius: '12px',
+//       color: 'rgba(255,255,255,0.3)',
+//       fontSize: '1rem',
+//       fontWeight: '600',
+//       cursor: 'not-allowed',
+//       marginBottom: '24px',
+//     },
+//     errorBox: {
+//       background: 'rgba(239,68,68,0.1)',
+//       border: '1px solid rgba(239,68,68,0.3)',
+//       borderRadius: '10px',
+//       padding: '12px 16px',
+//       color: '#fca5a5',
+//       fontSize: '0.875rem',
+//       marginBottom: '20px',
+//     },
+//     successBox: {
+//       background: 'rgba(34,197,94,0.1)',
+//       border: '1px solid rgba(34,197,94,0.3)',
+//       borderRadius: '10px',
+//       padding: '12px 16px',
+//       color: '#86efac',
+//       fontSize: '0.875rem',
+//       marginBottom: '20px',
+//     },
+//     divider: {
+//       height: '1px',
+//       background: 'rgba(255,255,255,0.08)',
+//       margin: '24px 0',
+//     },
+//     bottomRow: {
+//       display: 'flex',
+//       justifyContent: 'space-between',
+//       alignItems: 'center',
+//     },
+//     linkBtn: {
+//       background: 'none',
+//       border: 'none',
+//       color: 'rgba(255,255,255,0.45)',
+//       fontSize: '0.85rem',
+//       cursor: 'pointer',
+//       padding: '0',
+//     },
+//     resendBtn: {
+//       background: 'none',
+//       border: 'none',
+//       color: '#a78bfa',
+//       fontSize: '0.85rem',
+//       fontWeight: '600',
+//       cursor: 'pointer',
+//       padding: '0',
+//     },
+//     loginText: {
+//       textAlign: 'center',
+//       fontSize: '0.875rem',
+//       color: 'rgba(255,255,255,0.4)',
+//     },
+//     loginLink: {
+//       color: '#a78bfa',
+//       fontWeight: '600',
+//       textDecoration: 'none',
+//     },
+//     stepIndicator: {
+//       display: 'flex',
+//       justifyContent: 'center',
+//       gap: '8px',
+//       marginBottom: '32px',
+//     },
+//     stepDot: (active) => ({
+//       width: active ? '24px' : '8px',
+//       height: '8px',
+//       borderRadius: '100px',
+//       background: active
+//         ? 'linear-gradient(135deg, #8b5cf6, #ec4899)'
+//         : 'rgba(255,255,255,0.15)',
+//       transition: 'all 0.3s ease',
+//     }),
+//   };
+
+//   return (
+//     <div style={styles.page}>
+//       {/* Background orbs */}
+//       <div style={styles.orb1} />
+//       <div style={styles.orb2} />
+
+//       <div style={styles.card}>
+
+//         {/* Brand */}
+//         <div style={styles.brand}>
+//           <div style={styles.brandName}>
+//             AMBI <span style={styles.brandAccent}>MOOD</span>
+//           </div>
+//         </div>
+
+//         {/* Step Indicator */}
+//         <div style={styles.stepIndicator}>
+//           <div style={styles.stepDot(step === 1)} />
+//           <div style={styles.stepDot(step === 2)} />
+//         </div>
+
+//         {/* STEP 1: Signup Form */}
+//         {step === 1 && (
+//           <>
+//             <h2 style={styles.title}>Create Account</h2>
+//             <p style={styles.subtitle}>Join AMBI MOOD today ✨</p>
+
+//             {error && <div style={styles.errorBox}>❌ {error}</div>}
+//             {success && <div style={styles.successBox}>✅ {success}</div>}
+
+//             <form onSubmit={handleSubmit}>
+//               <label style={styles.label}>Full Name</label>
+//               <input
+//                 name="name"
+//                 type="text"
+//                 required
+//                 value={formData.name}
+//                 onChange={handleChange}
+//                 style={styles.input}
+//                 placeholder="Enter you name"
+//               />
+
+//               <label style={styles.label}>Email Address</label>
+//               <input
+//                 name="email"
+//                 type="email"
+//                 required
+//                 value={formData.email}
+//                 onChange={handleChange}
+//                 style={styles.input}
+//                 placeholder="you@example.com"
+//                 autoComplete="off"
+//               />
+
+//               <label style={styles.label}>Password</label>
+//               <input
+//                 name="password"
+//                 type="password"
+//                 required
+//                 value={formData.password}
+//                 onChange={handleChange}
+//                 style={styles.input}
+//                 placeholder="••••••••"
+//                 autoComplete="off"
+//               />
+
+//               <label style={styles.label}>Confirm Password</label>
+//               <input
+//                 name="confirmPassword"
+//                 type="password"
+//                 required
+//                 value={formData.confirmPassword}
+//                 onChange={handleChange}
+//                 style={{...styles.input, marginBottom: '28px'}}
+//                 placeholder="••••••••"
+//                 autoComplete="new-password"
+//               />
+
+//               <button
+//                 type="submit"
+//                 disabled={loading}
+//                 style={loading ? styles.btnDisabled : styles.btnPrimary}
+//               >
+//                 {loading ? '⏳ Sending OTP...' : '📧 Send OTP & Sign Up'}
+//               </button>
+//             </form>
+
+//             <div style={styles.loginText}>
+//               Already have an account?{' '}
+//               <Link to="/login" style={styles.loginLink}>
+//                 Login here
+//               </Link>
+//             </div>
+//           </>
+//         )}
+
+//         {/* STEP 2: OTP Verify */}
+//         {step === 2 && (
+//           <>
+//             <h2 style={styles.title}>Verify Email</h2>
+//             <p style={styles.subtitle}>
+//               OTP sent to{' '}
+//               <span style={styles.emailHighlight}>{formData.email}</span>
+//             </p>
+
+//             {error && <div style={styles.errorBox}>❌ {error}</div>}
+//             {success && <div style={styles.successBox}>✅ {success}</div>}
+
+//             <form onSubmit={handleVerifyOTP}>
+//               <input
+//                 type="text"
+//                 required
+//                 maxLength="6"
+//                 value={otp}
+//                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+//                 style={styles.otpInput}
+//                 placeholder="000000"
+//               />
+//               <p style={styles.otpHint}>
+//                 📬 Check Gmail inbox + Spam folder
+//               </p>
+
+//               <button
+//                 type="submit"
+//                 disabled={loading || otp.length !== 6}
+//                 style={
+//                   loading || otp.length !== 6
+//                     ? styles.btnDisabled
+//                     : styles.btnPrimary
+//                 }
+//               >
+//                 {loading ? '⏳ Verifying...' : '✅ Verify OTP'}
+//               </button>
+//             </form>
+
+//             <div style={styles.divider} />
+
+//             <div style={styles.bottomRow}>
+//               <button
+//                 onClick={() => {
+//                   setStep(1);
+//                   setError('');
+//                   setSuccess('');
+//                   setOtp('');
+//                 }}
+//                 style={styles.linkBtn}
+//               >
+//                 ← Change Email
+//               </button>
+//               <button
+//                 onClick={handleResendOTP}
+//                 disabled={loading}
+//                 style={styles.resendBtn}
+//               >
+//                 🔄 Resend OTP
+//               </button>
+//             </div>
+//           </>
+//         )}
+
+//       </div>
+//       <BackButton />
+//     </div>
+//   );
+// };
+
+// export default Signup;
+
+
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BackButton from './BackButton';
+
 const Signup = () => {
   const navigate = useNavigate();
-  
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => { setFormData({ ...formData, [e.target.name]: e.target.value }); };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match!');
-      return;
-    }
+    e.preventDefault(); setError(''); setSuccess('');
+    if (formData.password !== formData.confirmPassword) { setError('Passwords do not match!'); return; }
     setLoading(true);
     try {
-      const response = await fetch('https://ambimood-backend-2.onrender.com/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password
-        })
+      let response = await fetch('https://ambimood-backend-2.onrender.com/api/auth/signup', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
       });
-      const data = await response.json();
-      if (response.ok) {
-        setSuccess('OTP sent! Check your email 📧');
-        setTimeout(() => setStep(2), 1500);
-      } else {
-        setError(data.message);
+      if (response.status === 404) {
+        response = await fetch('https://ambimood-backend-2.onrender.com/api/signup', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
+        });
       }
-    } catch (err) {
-      setError('Cannot connect to server! Make sure backend is running.');
-    } finally {
-      setLoading(false);
-    }
+      const data = await response.json();
+      if (response.ok) { setSuccess('OTP sent! Check your email 📧'); setTimeout(() => setStep(2), 1500); }
+      else { setError(data.message || 'Signup failed!'); }
+    } catch (err) { setError('Cannot connect to server! Try again.'); }
+    finally { setLoading(false); }
   };
 
   const handleVerifyOTP = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+    e.preventDefault(); setError(''); setLoading(true);
     try {
-      const response = await fetch('https://ambimood-backend-2.onrender.com/api/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, otp: otp })
+      let response = await fetch('https://ambimood-backend-2.onrender.com/api/auth/verify-otp', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, otp })
       });
+      if (response.status === 404) {
+        response = await fetch('https://ambimood-backend-2.onrender.com/api/verify-otp', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: formData.email, otp })
+        });
+      }
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('userName', formData.name);
-      localStorage.setItem('userEmail', formData.email);
+        localStorage.setItem('userEmail', formData.email);
         setSuccess('Signup Successful! Redirecting...');
         setTimeout(() => navigate('/login'), 2000);
-      } else {
-        setError(data.message);
-      }
-    } catch (err) {
-      setError('Network error!');
-    } finally {
-      setLoading(false);
-    }
+      } else { setError(data.message || 'Invalid OTP!'); }
+    } catch (err) { setError('Network error!'); }
+    finally { setLoading(false); }
   };
 
   const handleResendOTP = async () => {
-    setLoading(true);
-    setError('');
-    setSuccess('');
+    setLoading(true); setError(''); setSuccess('');
     try {
-      const response = await fetch('https://ambimood-backend-2.onrender.com/api/resend-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      let response = await fetch('https://ambimood-backend-2.onrender.com/api/auth/resend-otp', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email })
       });
-      const data = await response.json();
-      if (response.ok) {
-        setSuccess('New OTP sent! 📧');
-      } else {
-        setError(data.message);
+      if (response.status === 404) {
+        response = await fetch('https://ambimood-backend-2.onrender.com/api/resend-otp', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: formData.email })
+        });
       }
-    } catch (err) {
-      setError('Error resending OTP');
-    } finally {
-      setLoading(false);
-    }
+      const data = await response.json();
+      if (response.ok) { setSuccess('New OTP sent! 📧'); }
+      else { setError(data.message); }
+    } catch (err) { setError('Error resending OTP'); }
+    finally { setLoading(false); }
   };
 
-  const styles = {
-    page: {
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0a0a0f 0%, #1a0533 50%, #0d0d1a 100%)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '40px 16px',
-      fontFamily: "'DM Sans', sans-serif",
-      position: 'relative',
-      overflow: 'hidden',
-    },
-    orb1: {
-      position: 'absolute',
-      width: '400px',
-      height: '400px',
-      background: 'radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%)',
-      top: '-100px',
-      left: '-100px',
-      borderRadius: '50%',
-      pointerEvents: 'none',
-    },
-    orb2: {
-      position: 'absolute',
-      width: '350px',
-      height: '350px',
-      background: 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, transparent 70%)',
-      bottom: '-80px',
-      right: '-80px',
-      borderRadius: '50%',
-      pointerEvents: 'none',
-    },
-    card: {
-      background: 'rgba(255,255,255,0.04)',
-      border: '1px solid rgba(139,92,246,0.25)',
-      borderRadius: '24px',
-      padding: '48px 40px',
-      width: '100%',
-      maxWidth: '440px',
-      backdropFilter: 'blur(20px)',
-      position: 'relative',
-      zIndex: 1,
-    },
-    brand: {
-      textAlign: 'center',
-      marginBottom: '32px',
-    },
-    brandName: {
-      fontSize: '1.4rem',
-      fontWeight: '800',
-      color: 'white',
-      letterSpacing: '3px',
-      fontFamily: 'serif',
-    },
-    brandAccent: {
-      color: '#a78bfa',
-    },
-    title: {
-      fontSize: '1.9rem',
-      fontWeight: '700',
-      color: 'white',
-      textAlign: 'center',
-      marginBottom: '8px',
-    },
-    subtitle: {
-      fontSize: '0.9rem',
-      color: 'rgba(255,255,255,0.45)',
-      textAlign: 'center',
-      marginBottom: '32px',
-    },
-    emailHighlight: {
-      color: '#a78bfa',
-      fontWeight: '600',
-    },
-    label: {
-      display: 'block',
-      fontSize: '0.8rem',
-      fontWeight: '500',
-      color: 'rgba(255,255,255,0.6)',
-      marginBottom: '8px',
-      letterSpacing: '0.5px',
-      textTransform: 'uppercase',
-    },
-    input: {
-      width: '100%',
-      padding: '14px 18px',
-      background: 'rgba(255,255,255,0.06)',
-      border: '1px solid rgba(139,92,246,0.2)',
-      borderRadius: '12px',
-      color: 'white',
-      fontSize: '0.95rem',
-      outline: 'none',
-      transition: 'border-color 0.3s',
-      marginBottom: '20px',
-      boxSizing: 'border-box',
-    },
-    otpInput: {
-      width: '100%',
-      padding: '18px',
-      background: 'rgba(255,255,255,0.06)',
-      border: '2px solid rgba(139,92,246,0.3)',
-      borderRadius: '16px',
-      color: 'white',
-      fontSize: '2rem',
-      fontWeight: '700',
-      textAlign: 'center',
-      letterSpacing: '12px',
-      outline: 'none',
-      marginBottom: '8px',
-      boxSizing: 'border-box',
-    },
-    otpHint: {
-      fontSize: '0.78rem',
-      color: 'rgba(255,255,255,0.35)',
-      textAlign: 'center',
-      marginBottom: '24px',
-    },
-    btnPrimary: {
-      width: '100%',
-      padding: '15px',
-      background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-      border: 'none',
-      borderRadius: '12px',
-      color: 'white',
-      fontSize: '1rem',
-      fontWeight: '600',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      marginBottom: '24px',
-      letterSpacing: '0.3px',
-    },
-    btnDisabled: {
-      width: '100%',
-      padding: '15px',
-      background: 'rgba(255,255,255,0.1)',
-      border: 'none',
-      borderRadius: '12px',
-      color: 'rgba(255,255,255,0.3)',
-      fontSize: '1rem',
-      fontWeight: '600',
-      cursor: 'not-allowed',
-      marginBottom: '24px',
-    },
-    errorBox: {
-      background: 'rgba(239,68,68,0.1)',
-      border: '1px solid rgba(239,68,68,0.3)',
-      borderRadius: '10px',
-      padding: '12px 16px',
-      color: '#fca5a5',
-      fontSize: '0.875rem',
-      marginBottom: '20px',
-    },
-    successBox: {
-      background: 'rgba(34,197,94,0.1)',
-      border: '1px solid rgba(34,197,94,0.3)',
-      borderRadius: '10px',
-      padding: '12px 16px',
-      color: '#86efac',
-      fontSize: '0.875rem',
-      marginBottom: '20px',
-    },
-    divider: {
-      height: '1px',
-      background: 'rgba(255,255,255,0.08)',
-      margin: '24px 0',
-    },
-    bottomRow: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    linkBtn: {
-      background: 'none',
-      border: 'none',
-      color: 'rgba(255,255,255,0.45)',
-      fontSize: '0.85rem',
-      cursor: 'pointer',
-      padding: '0',
-    },
-    resendBtn: {
-      background: 'none',
-      border: 'none',
-      color: '#a78bfa',
-      fontSize: '0.85rem',
-      fontWeight: '600',
-      cursor: 'pointer',
-      padding: '0',
-    },
-    loginText: {
-      textAlign: 'center',
-      fontSize: '0.875rem',
-      color: 'rgba(255,255,255,0.4)',
-    },
-    loginLink: {
-      color: '#a78bfa',
-      fontWeight: '600',
-      textDecoration: 'none',
-    },
-    stepIndicator: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: '8px',
-      marginBottom: '32px',
-    },
-    stepDot: (active) => ({
-      width: active ? '24px' : '8px',
-      height: '8px',
-      borderRadius: '100px',
-      background: active
-        ? 'linear-gradient(135deg, #8b5cf6, #ec4899)'
-        : 'rgba(255,255,255,0.15)',
-      transition: 'all 0.3s ease',
-    }),
+  const s = {
+    page: { minHeight: '100vh', background: 'linear-gradient(135deg, #0a0a0f 0%, #1a0533 50%, #0d0d1a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px', fontFamily: "'DM Sans', sans-serif", position: 'relative', overflow: 'hidden' },
+    orb1: { position: 'absolute', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%)', top: '-100px', left: '-100px', borderRadius: '50%', pointerEvents: 'none' },
+    orb2: { position: 'absolute', width: '350px', height: '350px', background: 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, transparent 70%)', bottom: '-80px', right: '-80px', borderRadius: '50%', pointerEvents: 'none' },
+    card: { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(139,92,246,0.25)', borderRadius: '24px', padding: '48px 40px', width: '100%', maxWidth: '440px', backdropFilter: 'blur(20px)', position: 'relative', zIndex: 1 },
+    brand: { textAlign: 'center', marginBottom: '32px' },
+    brandName: { fontSize: '1.4rem', fontWeight: '800', color: 'white', letterSpacing: '3px', fontFamily: 'serif' },
+    brandAccent: { color: '#a78bfa' },
+    title: { fontSize: '1.9rem', fontWeight: '700', color: 'white', textAlign: 'center', marginBottom: '8px' },
+    subtitle: { fontSize: '0.9rem', color: 'rgba(255,255,255,0.45)', textAlign: 'center', marginBottom: '32px' },
+    emailHL: { color: '#a78bfa', fontWeight: '600' },
+    label: { display: 'block', fontSize: '0.8rem', fontWeight: '500', color: 'rgba(255,255,255,0.6)', marginBottom: '8px', letterSpacing: '0.5px', textTransform: 'uppercase' },
+    input: { width: '100%', padding: '14px 18px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: '12px', color: 'white', fontSize: '0.95rem', outline: 'none', marginBottom: '20px', boxSizing: 'border-box' },
+    otpInput: { width: '100%', padding: '18px', background: 'rgba(255,255,255,0.06)', border: '2px solid rgba(139,92,246,0.3)', borderRadius: '16px', color: 'white', fontSize: '2rem', fontWeight: '700', textAlign: 'center', letterSpacing: '12px', outline: 'none', marginBottom: '8px', boxSizing: 'border-box' },
+    otpHint: { fontSize: '0.78rem', color: 'rgba(255,255,255,0.35)', textAlign: 'center', marginBottom: '24px' },
+    btn: { width: '100%', padding: '15px', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', border: 'none', borderRadius: '12px', color: 'white', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', marginBottom: '24px' },
+    btnOff: { width: '100%', padding: '15px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '12px', color: 'rgba(255,255,255,0.3)', fontSize: '1rem', fontWeight: '600', cursor: 'not-allowed', marginBottom: '24px' },
+    errBox: { background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#fca5a5', fontSize: '0.875rem', marginBottom: '20px' },
+    okBox: { background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#86efac', fontSize: '0.875rem', marginBottom: '20px' },
+    divider: { height: '1px', background: 'rgba(255,255,255,0.08)', margin: '24px 0' },
+    bottomRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+    linkBtn: { background: 'none', border: 'none', color: 'rgba(255,255,255,0.45)', fontSize: '0.85rem', cursor: 'pointer', padding: '0' },
+    resendBtn: { background: 'none', border: 'none', color: '#a78bfa', fontSize: '0.85rem', fontWeight: '600', cursor: 'pointer', padding: '0' },
+    loginText: { textAlign: 'center', fontSize: '0.875rem', color: 'rgba(255,255,255,0.4)' },
+    loginLink: { color: '#a78bfa', fontWeight: '600', textDecoration: 'none' },
+    stepRow: { display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '32px' },
+    dot: (a) => ({ width: a ? '24px' : '8px', height: '8px', borderRadius: '100px', background: a ? 'linear-gradient(135deg,#8b5cf6,#ec4899)' : 'rgba(255,255,255,0.15)', transition: 'all 0.3s' }),
   };
 
   return (
-    <div style={styles.page}>
-      {/* Background orbs */}
-      <div style={styles.orb1} />
-      <div style={styles.orb2} />
+    <div style={s.page}>
+      <div style={s.orb1} /><div style={s.orb2} />
+      <div style={s.card}>
+        <div style={s.brand}><div style={s.brandName}>AMBI <span style={s.brandAccent}>MOOD</span></div></div>
+        <div style={s.stepRow}><div style={s.dot(step===1)}/><div style={s.dot(step===2)}/></div>
 
-      <div style={styles.card}>
+        {step === 1 && (<>
+          <h2 style={s.title}>Create Account</h2>
+          <p style={s.subtitle}>Join AMBI MOOD today ✨</p>
+          {error && <div style={s.errBox}>❌ {error}</div>}
+          {success && <div style={s.okBox}>✅ {success}</div>}
+          <form onSubmit={handleSubmit}>
+            <label style={s.label}>Full Name</label>
+            <input name="name" type="text" required value={formData.name} onChange={handleChange} style={s.input} placeholder="Enter your name" />
+            <label style={s.label}>Email Address</label>
+            <input name="email" type="email" required value={formData.email} onChange={handleChange} style={s.input} placeholder="you@example.com" />
+            <label style={s.label}>Password</label>
+            <input name="password" type="password" required value={formData.password} onChange={handleChange} style={s.input} placeholder="••••••••" />
+            <label style={s.label}>Confirm Password</label>
+            <input name="confirmPassword" type="password" required value={formData.confirmPassword} onChange={handleChange} style={{...s.input, marginBottom:'28px'}} placeholder="••••••••" />
+            <button type="submit" disabled={loading} style={loading ? s.btnOff : s.btn}>
+              {loading ? '⏳ Sending OTP...' : '📧 Send OTP & Sign Up'}
+            </button>
+          </form>
+          <div style={s.loginText}>Already have an account?{' '}<Link to="/login" style={s.loginLink}>Login here</Link></div>
+        </>)}
 
-        {/* Brand */}
-        <div style={styles.brand}>
-          <div style={styles.brandName}>
-            AMBI <span style={styles.brandAccent}>MOOD</span>
+        {step === 2 && (<>
+          <h2 style={s.title}>Verify Email</h2>
+          <p style={s.subtitle}>OTP sent to <span style={s.emailHL}>{formData.email}</span></p>
+          {error && <div style={s.errBox}>❌ {error}</div>}
+          {success && <div style={s.okBox}>✅ {success}</div>}
+          <form onSubmit={handleVerifyOTP}>
+            <input type="text" required maxLength="6" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g,''))} style={s.otpInput} placeholder="000000" />
+            <p style={s.otpHint}>📬 Check Gmail inbox + Spam folder</p>
+            <button type="submit" disabled={loading || otp.length !== 6} style={loading || otp.length !== 6 ? s.btnOff : s.btn}>
+              {loading ? '⏳ Verifying...' : '✅ Verify OTP'}
+            </button>
+          </form>
+          <div style={s.divider} />
+          <div style={s.bottomRow}>
+            <button onClick={() => { setStep(1); setError(''); setSuccess(''); setOtp(''); }} style={s.linkBtn}>← Change Email</button>
+            <button onClick={handleResendOTP} disabled={loading} style={s.resendBtn}>🔄 Resend OTP</button>
           </div>
-        </div>
-
-        {/* Step Indicator */}
-        <div style={styles.stepIndicator}>
-          <div style={styles.stepDot(step === 1)} />
-          <div style={styles.stepDot(step === 2)} />
-        </div>
-
-        {/* STEP 1: Signup Form */}
-        {step === 1 && (
-          <>
-            <h2 style={styles.title}>Create Account</h2>
-            <p style={styles.subtitle}>Join AMBI MOOD today ✨</p>
-
-            {error && <div style={styles.errorBox}>❌ {error}</div>}
-            {success && <div style={styles.successBox}>✅ {success}</div>}
-
-            <form onSubmit={handleSubmit}>
-              <label style={styles.label}>Full Name</label>
-              <input
-                name="name"
-                type="text"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                style={styles.input}
-                placeholder="Enter you name"
-              />
-
-              <label style={styles.label}>Email Address</label>
-              <input
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                style={styles.input}
-                placeholder="you@example.com"
-                autoComplete="off"
-              />
-
-              <label style={styles.label}>Password</label>
-              <input
-                name="password"
-                type="password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                style={styles.input}
-                placeholder="••••••••"
-                autoComplete="off"
-              />
-
-              <label style={styles.label}>Confirm Password</label>
-              <input
-                name="confirmPassword"
-                type="password"
-                required
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                style={{...styles.input, marginBottom: '28px'}}
-                placeholder="••••••••"
-                autoComplete="new-password"
-              />
-
-              <button
-                type="submit"
-                disabled={loading}
-                style={loading ? styles.btnDisabled : styles.btnPrimary}
-              >
-                {loading ? '⏳ Sending OTP...' : '📧 Send OTP & Sign Up'}
-              </button>
-            </form>
-
-            <div style={styles.loginText}>
-              Already have an account?{' '}
-              <Link to="/login" style={styles.loginLink}>
-                Login here
-              </Link>
-            </div>
-          </>
-        )}
-
-        {/* STEP 2: OTP Verify */}
-        {step === 2 && (
-          <>
-            <h2 style={styles.title}>Verify Email</h2>
-            <p style={styles.subtitle}>
-              OTP sent to{' '}
-              <span style={styles.emailHighlight}>{formData.email}</span>
-            </p>
-
-            {error && <div style={styles.errorBox}>❌ {error}</div>}
-            {success && <div style={styles.successBox}>✅ {success}</div>}
-
-            <form onSubmit={handleVerifyOTP}>
-              <input
-                type="text"
-                required
-                maxLength="6"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                style={styles.otpInput}
-                placeholder="000000"
-              />
-              <p style={styles.otpHint}>
-                📬 Check Gmail inbox + Spam folder
-              </p>
-
-              <button
-                type="submit"
-                disabled={loading || otp.length !== 6}
-                style={
-                  loading || otp.length !== 6
-                    ? styles.btnDisabled
-                    : styles.btnPrimary
-                }
-              >
-                {loading ? '⏳ Verifying...' : '✅ Verify OTP'}
-              </button>
-            </form>
-
-            <div style={styles.divider} />
-
-            <div style={styles.bottomRow}>
-              <button
-                onClick={() => {
-                  setStep(1);
-                  setError('');
-                  setSuccess('');
-                  setOtp('');
-                }}
-                style={styles.linkBtn}
-              >
-                ← Change Email
-              </button>
-              <button
-                onClick={handleResendOTP}
-                disabled={loading}
-                style={styles.resendBtn}
-              >
-                🔄 Resend OTP
-              </button>
-            </div>
-          </>
-        )}
-
+        </>)}
       </div>
       <BackButton />
     </div>
