@@ -122,6 +122,94 @@
 
 
 
+// import React, { useState } from 'react';
+// import { Link, useNavigate } from 'react-router-dom';
+// import BackButton from './BackButton';
+
+// const Login = () => {
+//   const navigate = useNavigate();
+//   const [formData, setFormData] = useState({ email: '', password: '' });
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState('');
+
+//   const handleChange = (e) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setError('');
+//     setLoading(true);
+//     try {
+//       const response = await fetch('https://ambimood-backend-2.onrender.com/api/login', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ email: formData.email, password: formData.password })
+//       });
+//       const data = await response.json();
+//       if (response.ok) {
+//         localStorage.setItem('userName', data.user?.name || formData.email.split('@')[0]);
+//         localStorage.setItem('userEmail', data.user?.email || formData.email);
+//         navigate('/');
+//       } else {
+//         setError(data.message || 'Invalid email or password!');
+//       }
+//     } catch (err) {
+//       setError('Cannot connect to server! Try again.');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const styles = {
+//     page: { minHeight: '100vh', background: 'linear-gradient(135deg, #0a0a0f 0%, #1a0533 50%, #0d0d1a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px', fontFamily: "'DM Sans', sans-serif", position: 'relative', overflow: 'hidden' },
+//     orb1: { position: 'fixed', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%)', top: '-100px', left: '-100px', borderRadius: '50%', pointerEvents: 'none' },
+//     orb2: { position: 'fixed', width: '350px', height: '350px', background: 'radial-gradient(circle, rgba(236,72,153,0.2) 0%, transparent 70%)', bottom: '-80px', right: '-80px', borderRadius: '50%', pointerEvents: 'none' },
+//     card: { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(139,92,246,0.25)', borderRadius: '24px', padding: '48px 40px', width: '100%', maxWidth: '420px', backdropFilter: 'blur(20px)', position: 'relative', zIndex: 1 },
+//     brand: { textAlign: 'center', marginBottom: '32px' },
+//     brandName: { fontSize: '1.4rem', fontWeight: '800', color: 'white', letterSpacing: '3px', fontFamily: 'serif', textDecoration: 'none' },
+//     brandAccent: { color: '#a78bfa' },
+//     title: { fontSize: '1.9rem', fontWeight: '700', color: 'white', textAlign: 'center', marginBottom: '8px' },
+//     subtitle: { fontSize: '0.9rem', color: 'rgba(255,255,255,0.45)', textAlign: 'center', marginBottom: '32px' },
+//     label: { display: 'block', fontSize: '0.78rem', fontWeight: '500', color: 'rgba(255,255,255,0.55)', marginBottom: '8px', letterSpacing: '0.5px', textTransform: 'uppercase' },
+//     input: { width: '100%', padding: '14px 18px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: '12px', color: 'white', fontSize: '0.95rem', outline: 'none', marginBottom: '20px', boxSizing: 'border-box', fontFamily: "'DM Sans', sans-serif" },
+//     btnPrimary: { width: '100%', padding: '15px', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', border: 'none', borderRadius: '12px', color: 'white', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', marginBottom: '24px', fontFamily: "'DM Sans', sans-serif" },
+//     btnDisabled: { width: '100%', padding: '15px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '12px', color: 'rgba(255,255,255,0.3)', fontSize: '1rem', fontWeight: '600', cursor: 'not-allowed', marginBottom: '24px' },
+//     errorBox: { background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#fca5a5', fontSize: '0.875rem', marginBottom: '20px' },
+//     divider: { height: '1px', background: 'rgba(255,255,255,0.08)', margin: '0 0 24px' },
+//     signupText: { textAlign: 'center', fontSize: '0.875rem', color: 'rgba(255,255,255,0.4)' },
+//     signupLink: { color: '#a78bfa', fontWeight: '600', textDecoration: 'none' },
+//   };
+
+//   return (
+//     <div style={styles.page}>
+//       <div style={styles.orb1} /><div style={styles.orb2} />
+//       <div style={styles.card}>
+//         <div style={styles.brand}>
+//           <Link to="/" style={styles.brandName}>AMBI <span style={styles.brandAccent}>MOOD</span></Link>
+//         </div>
+//         <h2 style={styles.title}>Welcome Back</h2>
+//         <p style={styles.subtitle}>Login to your account 🎵</p>
+//         {error && <div style={styles.errorBox}>❌ {error}</div>}
+//         <form onSubmit={handleSubmit}>
+//           <label style={styles.label}>Email Address</label>
+//           <input name="email" type="email" required value={formData.email} onChange={handleChange} style={styles.input} placeholder="you@example.com" />
+//           <label style={styles.label}>Password</label>
+//           <input name="password" type="password" required value={formData.password} onChange={handleChange} style={{ ...styles.input, marginBottom: '28px' }} placeholder="••••••••" />
+//           <button type="submit" disabled={loading} style={loading ? styles.btnDisabled : styles.btnPrimary}>
+//             {loading ? '⏳ Logging in...' : '🔐 Login'}
+//           </button>
+//         </form>
+//         <div style={styles.divider} />
+//         <p style={styles.signupText}>Don't have an account?{' '}<Link to="/signup" style={styles.signupLink}>Sign up here</Link></p>
+//       </div>
+//       <BackButton />
+//     </div>
+//   );
+// };
+
+// export default Login;
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BackButton from './BackButton';
@@ -209,4 +297,3 @@ const Login = () => {
 };
 
 export default Login;
-

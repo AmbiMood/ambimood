@@ -1269,7 +1269,7 @@ const Signup = () => {
     if (formData.password !== formData.confirmPassword) { setError('Passwords do not match!'); return; }
     setLoading(true);
     try {
-      let response = await fetch('https://ambimood-backend-2.onrender.com/api/auth/signup', {
+      let response = await fetch('https://ambimood-backend-2.onrender.com/api/signup', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
       });
@@ -1289,7 +1289,7 @@ const Signup = () => {
   const handleVerifyOTP = async (e) => {
     e.preventDefault(); setError(''); setLoading(true);
     try {
-      let response = await fetch('https://ambimood-backend-2.onrender.com/api/auth/verify-otp', {
+      let response = await fetch('https://ambimood-backend-2.onrender.com/api/verify-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, otp })
       });
@@ -1313,7 +1313,7 @@ const Signup = () => {
   const handleResendOTP = async () => {
     setLoading(true); setError(''); setSuccess('');
     try {
-      let response = await fetch('https://ambimood-backend-2.onrender.com/api/auth/resend-otp', {
+      let response = await fetch('https://ambimood-backend-2.onrender.com/api/resend-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email })
       });
