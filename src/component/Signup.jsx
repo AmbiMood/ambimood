@@ -4,7 +4,7 @@
 // const Signup = () => {
 //     // const navigate = useNavigate();
 //     // navigate('/signup');
-    
+
 //   const [formData, setFormData] = useState({
 //     name: '',
 //     email: '',
@@ -23,9 +23,9 @@
 //     e.preventDefault();
 //     console.log('Signup data:', formData);
 //     alert('Signup successful! (Demo)');
-    
+
 //     // Navigate to signup page after signup
-    
+
 //   };
 
 //   return (
@@ -133,7 +133,7 @@
 
 // const Signup = () => {
 //   const navigate = useNavigate();
-  
+
 //   const [step, setStep] = useState(1);
 //   const [formData, setFormData] = useState({
 //     name: '',
@@ -457,7 +457,7 @@
 
 // const Signup = () => {
 //   const navigate = useNavigate();
-  
+
 //   const [step, setStep] = useState(1);
 //   const [formData, setFormData] = useState({
 //     name: '',
@@ -765,7 +765,7 @@
 // import BackButton from './BackButton';
 // const Signup = () => {
 //   const navigate = useNavigate();
-  
+
 //   const [step, setStep] = useState(1);
 //   const [formData, setFormData] = useState({
 //     name: '',
@@ -1264,25 +1264,61 @@ const Signup = () => {
 
   const handleChange = (e) => { setFormData({ ...formData, [e.target.name]: e.target.value }); };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault(); setError(''); setSuccess('');
+  //   if (formData.password !== formData.confirmPassword) { setError('Passwords do not match!'); return; }
+  //   setLoading(true);
+  //   try {
+  //     let response = await fetch('https://ambimood-backend-2.onrender.com/api/signup', {
+  //       method: 'POST', headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
+  //     });
+  //     if (response.status === 404) {
+  //       response = await fetch('https://ambimood-backend-2.onrender.com/api/signup', {
+  //         method: 'POST', headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
+  //       });
+  //     }
+  //     const data = await response.json();
+  //     if (response.ok) { setSuccess('OTP sent! Check your email 📧'); setTimeout(() => setStep(2), 1500); }
+  //     else { setError(data.message || 'Signup failed!'); }
+  //   } catch (err) { setError('Cannot connect to server! Try again.'); }
+  //   finally { setLoading(false); }
+  // };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault(); setError(''); setSuccess('');
-    if (formData.password !== formData.confirmPassword) { setError('Passwords do not match!'); return; }
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match!'); return;
+    }
     setLoading(true);
+    setSuccess('⏳ Waking up server... please wait 30 seconds...');
     try {
-      let response = await fetch('https://ambimood-backend-2.onrender.com/api/signup', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 seconds
+
+      const response = await fetch('https://ambimood-backend.onrender.com/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password }),
+        signal: controller.signal
       });
-      if (response.status === 404) {
-        response = await fetch('https://ambimood-backend-2.onrender.com/api/signup', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
-        });
-      }
+      clearTimeout(timeoutId);
       const data = await response.json();
-      if (response.ok) { setSuccess('OTP sent! Check your email 📧'); setTimeout(() => setStep(2), 1500); }
-      else { setError(data.message || 'Signup failed!'); }
-    } catch (err) { setError('Cannot connect to server! Try again.'); }
+      if (response.ok) {
+        setSuccess('OTP sent! Check your email 📧');
+        setTimeout(() => setStep(2), 1500);
+      } else {
+        setError(data.message || 'Signup failed!');
+      }
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        setError('Server is slow! Try again once more.');
+      } else {
+        setError('Cannot connect to server! Try again.');
+      }
+    }
     finally { setLoading(false); }
   };
 
@@ -1364,7 +1400,7 @@ const Signup = () => {
       <div style={s.orb1} /><div style={s.orb2} />
       <div style={s.card}>
         <div style={s.brand}><div style={s.brandName}>AMBI <span style={s.brandAccent}>MOOD</span></div></div>
-        <div style={s.stepRow}><div style={s.dot(step===1)}/><div style={s.dot(step===2)}/></div>
+        <div style={s.stepRow}><div style={s.dot(step === 1)} /><div style={s.dot(step === 2)} /></div>
 
         {step === 1 && (<>
           <h2 style={s.title}>Create Account</h2>
@@ -1379,7 +1415,7 @@ const Signup = () => {
             <label style={s.label}>Password</label>
             <input name="password" type="password" required value={formData.password} onChange={handleChange} style={s.input} placeholder="••••••••" />
             <label style={s.label}>Confirm Password</label>
-            <input name="confirmPassword" type="password" required value={formData.confirmPassword} onChange={handleChange} style={{...s.input, marginBottom:'28px'}} placeholder="••••••••" />
+            <input name="confirmPassword" type="password" required value={formData.confirmPassword} onChange={handleChange} style={{ ...s.input, marginBottom: '28px' }} placeholder="••••••••" />
             <button type="submit" disabled={loading} style={loading ? s.btnOff : s.btn}>
               {loading ? '⏳ Sending OTP...' : '📧 Send OTP & Sign Up'}
             </button>
@@ -1393,7 +1429,7 @@ const Signup = () => {
           {error && <div style={s.errBox}>❌ {error}</div>}
           {success && <div style={s.okBox}>✅ {success}</div>}
           <form onSubmit={handleVerifyOTP}>
-            <input type="text" required maxLength="6" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g,''))} style={s.otpInput} placeholder="000000" />
+            <input type="text" required maxLength="6" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))} style={s.otpInput} placeholder="000000" />
             <p style={s.otpHint}>📬 Check Gmail inbox + Spam folder</p>
             <button type="submit" disabled={loading || otp.length !== 6} style={loading || otp.length !== 6 ? s.btnOff : s.btn}>
               {loading ? '⏳ Verifying...' : '✅ Verify OTP'}

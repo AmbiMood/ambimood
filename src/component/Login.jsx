@@ -3,7 +3,7 @@
 
 // const Login = () => {
 //   const navigate = useNavigate();
-  
+
 //   const [formData, setFormData] = useState({
 //     email: '',
 //     password: '',
@@ -22,7 +22,7 @@
 //     e.preventDefault();
 //     console.log('Login data:', formData);
 //     alert('Login successful! (Demo)');
-    
+
 //     // Navigate to home page after login
 //     navigate('/');
 //   };
@@ -224,16 +224,48 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError('');
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch('https://ambimood-backend.onrender.com/api/auth/login', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ email: formData.email, password: formData.password })
+  //     });
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       localStorage.setItem('userName', data.user?.name || formData.email.split('@')[0]);
+  //       localStorage.setItem('userEmail', data.user?.email || formData.email);
+  //       navigate('/');
+  //     } else {
+  //       setError(data.message || 'Invalid email or password!');
+  //     }
+  //   } catch (err) {
+  //     setError('Cannot connect to server! Try again.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
+
       const response = await fetch('https://ambimood-backend.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, password: formData.password })
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('userName', data.user?.name || formData.email.split('@')[0]);
@@ -243,7 +275,11 @@ const Login = () => {
         setError(data.message || 'Invalid email or password!');
       }
     } catch (err) {
-      setError('Cannot connect to server! Try again.');
+      if (err.name === 'AbortError') {
+        setError('Server is slow! Try again once more.');
+      } else {
+        setError('Cannot connect to server! Try again.');
+      }
     } finally {
       setLoading(false);
     }
