@@ -59,6 +59,7 @@
 
 
 
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './component/Home';
 import About from './component/About';
@@ -67,8 +68,13 @@ import Login from './component/Login';
 import Signup from './component/Signup';
 import Profile from './component/Profile';
 import EmotionDetector from './component/EmotionDetector';
+import { keepServerWarm } from './utils/serverWakeup';
 
 function App() {
+  useEffect(() => {
+    keepServerWarm();
+  }, []);
+
   return (
     <Router>
       <Routes>
