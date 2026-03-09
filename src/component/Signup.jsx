@@ -1450,12 +1450,13 @@
 // export default Signup;
 
 
+// 
+
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BackButton from './BackButton';
 
-// const BACKEND = 'https://ambimood-backend-2.onrender.com';
-const BACKEND = 'https://ambimood-backend-production.up.railway.app';
 const Signup = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -1467,23 +1468,12 @@ const Signup = () => {
 
   const handleChange = (e) => { setFormData({ ...formData, [e.target.name]: e.target.value }); };
 
-  const fetchWithRetry = async (url, options) => {
-    try {
-      const res = await fetch(url, options);
-      return res;
-    } catch (err) {
-      setError('🔄 Connecting to server... please wait...');
-      await new Promise(r => setTimeout(r, 5000));
-      return await fetch(url, options);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault(); setError(''); setSuccess('');
     if (formData.password !== formData.confirmPassword) { setError('Passwords do not match!'); return; }
     setLoading(true);
     try {
-      const response = await fetchWithRetry(`${BACKEND}/api/signup`, {
+      const response = await fetch('/api/signup', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
       });
@@ -1498,7 +1488,7 @@ const Signup = () => {
   const handleVerifyOTP = async (e) => {
     e.preventDefault(); setError(''); setLoading(true);
     try {
-      const response = await fetchWithRetry(`${BACKEND}/api/verify-otp`, {
+      const response = await fetch('/api/verify-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, otp })
       });
@@ -1516,7 +1506,7 @@ const Signup = () => {
   const handleResendOTP = async () => {
     setLoading(true); setError(''); setSuccess('');
     try {
-      const response = await fetchWithRetry(`${BACKEND}/api/resend-otp`, {
+      const response = await fetch('/api/resend-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email })
       });
