@@ -141,7 +141,7 @@
 //     setError('');
 //     setLoading(true);
 //     try {
-//       const response = await fetch('https://ambimood-backend.onrender.com/api/auth/login', {
+//       const response = await fetch('https://ambimood-backend-2.onrender.com/api/login', {
 //         method: 'POST',
 //         headers: { 'Content-Type': 'application/json' },
 //         body: JSON.stringify({ email: formData.email, password: formData.password })
@@ -229,7 +229,7 @@
 //   //   setError('');
 //   //   setLoading(true);
 //   //   try {
-//   //     const response = await fetch('https://ambimood-backend.onrender.com/api/auth/login', {
+//   //     const response = await fetch('https://ambimood-backend-2.onrender.com/api/auth/login', {
 //   //       method: 'POST',
 //   //       headers: { 'Content-Type': 'application/json' },
 //   //       body: JSON.stringify({ email: formData.email, password: formData.password })
@@ -259,7 +259,7 @@
 //       const controller = new AbortController();
 //       const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-//       const response = await fetch('https://ambimood-backend.onrender.com/api/auth/login', {
+//       const response = await fetch('https://ambimood-backend-2.onrender.com/api/auth/login', {
 //         method: 'POST',
 //         headers: { 'Content-Type': 'application/json' },
 //         body: JSON.stringify({ email: formData.email, password: formData.password }),
@@ -340,8 +340,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BackButton from './BackButton';
 
-const BACKEND = 'https://ambimood-backend.onrender.com';
-
+// const BACKEND = 'https://ambimood-backend-2.onrender.com';
+const BACKEND = 'https://ambimood-backend-production.up.railway.app';
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -357,7 +357,7 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      const response = await fetch(`${BACKEND}/api/auth/login`, {
+      const response = await fetch(`${BACKEND}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, password: formData.password })
@@ -375,7 +375,7 @@ const Login = () => {
       try {
         setError('🔄 Connecting to server... please wait...');
         await new Promise(r => setTimeout(r, 5000));
-        const retry = await fetch(`${BACKEND}/api/auth/login`, {
+        const retry = await fetch(`${BACKEND}/api/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email, password: formData.password })
