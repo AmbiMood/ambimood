@@ -1,5 +1,5 @@
-const BACKEND_URL = 'https://ambimood-backend-2.onrender.com';
-
+// const BACKEND_URL = 'https://ambimood-backend-2.onrender.com';
+const BACKEND_URL = 'https://ambimood-backend-production.up.railway.app';
 export const wakeUpServer = async () => {
   try {
     await fetch(`${BACKEND_URL}/api/health`);
