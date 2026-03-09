@@ -1296,7 +1296,7 @@ const Signup = () => {
     setSuccess('⏳ Waking up server... please wait 30 seconds...');
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 seconds
+      const timeoutId = setTimeout(() => controller.abort(), 120000); // 60 seconds
 
       const response = await fetch('https://ambimood-backend.onrender.com/api/auth/signup', {
         method: 'POST',
